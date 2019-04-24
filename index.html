@@ -18,6 +18,8 @@
         // CAROUSEL SCRIPT
         $(document).ready(function () {
 
+            $('select').formSelect();
+            $('.datepicker').datepicker();
             $('.carousel.carousel-slider').carousel({
                 fullWidth: true
             });
@@ -28,7 +30,7 @@
         });
     </script>
     <style>
-        .card .card-content{
+        .card .card-content {
             min-height: 132px;
         }
     </style>
@@ -36,23 +38,62 @@
 
 <body>
 
-        <!-- NAVBAR -->
-        <nav>
-            <div class="nav-wrapper  teal darken-4">
-                <a href="index.html" class="brand-logo" style="margin-left: 2%;"><i
-                        class="medium material-icons">directions_car</i>RentACar</a>
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href="ofertas.html">Ofertas</a></li>
-                    <li><a href="#">Vehículos</a></li>
-                    <li><a href="signup.html">Sign Up</a></li>
-                    <li><a href="login.html">Log In</a></li>
-                </ul>
-            </div>
-        </nav>
-        <div class="container">
-
-        <!-- CARTAS DE VEHÍCULOS -->
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-wrapper  teal darken-4">
+            <a href="index.html" class="brand-logo" style="margin-left: 2%;"><i
+                    class="medium material-icons">directions_car</i>RentACar</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="ofertas.html">Ofertas</a></li>
+                <li><a href="#">Vehículos</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
+                <li><a href="login.html">Log In</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
         <div class="row" style="margin-top:2%;">
+            <h2 class="center-align">CONSULTA NUESTROS VEHÍCULOS</h1>
+            <div class="col s12 m12 l12">
+                <div class="input-field col s2">
+                    <input type="text" class="datepicker">
+                    <label>Fecha de recogida</label>
+                </div>
+                <div class="input-field col s2">
+                    <input type="text" class="datepicker">
+                    <label>Fecha de vuelta</label>
+                </div>
+                <div class="input-field col s4">
+                    <select>
+                        <option value="" disabled selected>Recogida y devolución</option>
+                        <option value="0">Aeropuerto de Palma de Mallorca</option>
+                        <option value="1">5</option>
+                        <option value="2">7</option>
+                        <option value="3">9</option>
+                    </select>
+                    <label>Lugar de recogida y devolución</label>
+                </div>
+                <div class="input-field col s2">
+                    <select>
+                        <option value="" disabled selected>Marca</option>
+                        <option value="0">Cualquiera</option>
+                        <option value="1">Renault</option>
+                        <option value="2">Fiat</option>
+                        <option value="3">Opel</option>
+                        <option value="4">Nissan</option>
+                    </select>
+                    <label>Elige la marca</label>
+                </div>
+              
+                <div class="input-field col s2">
+                    <button class="btn waves-effect teal darken-4" type="submit" name="action">BUSCAR
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- CARTAS DE VEHÍCULOS -->
+        <div class="row">
             <div class="col s12 m4 l4">
                 <div class="card">
                     <div class="card-image waves-effect waves-block waves-light">
