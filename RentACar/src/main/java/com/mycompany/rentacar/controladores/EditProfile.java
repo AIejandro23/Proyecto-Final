@@ -6,21 +6,32 @@
 package com.mycompany.rentacar.controladores;
 
 import com.mycompany.rentacar.crud.Crud;
+import com.mycompany.rentacar.entities.Customer;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author Alejandro
  */
-public class InsertUser extends HttpServlet {
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2,
+        maxFileSize = 1024 * 1024 * 10,
+        maxRequestSize = 1024 * 1024 * 50,
+        location="C:\\Users\\Alejandro\\Documents\\NetBeansProjects\\RentACar\\src\\main\\webapp\\imagenes")
+@WebServlet(name = "EditProfile", urlPatterns = {"/EditProfile"})
+public class EditProfile extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,8 +44,7 @@ public class InsertUser extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-       
+   
         try{
         String nombre = request.getParameter("nombre");
         String apellidos = request.getParameter("apellidos");
@@ -42,29 +52,44 @@ public class InsertUser extends HttpServlet {
         String password = request.getParameter("password");
         String pais = request.getParameter("pais");
         String telefono = request.getParameter("phone");
-        String aniversario = request.getParameter("birthday");
         String dni = request.getParameter("dni");
         
+        Part imagen = request.getPart("imagen");
+        String nombreImagen = extractFileName(imagen);      
         
-        SimpleDateFormat formatter1=new SimpleDateFormat("MMM dd, yyyy");  
-        Date dateAniversario = formatter1.parse(aniversario);  
+        
+        String savePath = "C:\\Users\\Alejandro\\Documents\\NetBeansProjects\\RentACar\\src\\main\\webapp\\imagenes" + File.separator + nombreImagen;
+        File fileSave = new File(savePath);
+ 
         
         int phone = Integer.parseInt(telefono);
         
         Crud crud = new Crud();
         
-        crud.insertUser(nombre, apellidos, password, email, pais, phone, dateAniversario,dni);
+        Customer usuario = crud.editUser(nombre, apellidos, password, email, pais, phone,dni,nombreImagen,savePath);
         
         RequestDispatcher rs = request.getRequestDispatcher("/WEB-INF/Layout.jsp");
-        request.setAttribute("pagina", "login");
-                
+        request.setAttribute("pagina", "perfil");
+            HttpSession httpsession = request.getSession();
+               
+            httpsession.setAttribute("usuario",usuario);      
         rs.forward(request, response);
         
         }catch(Exception e){
             System.out.println("Error: "+  e.getMessage());
         }
-       
         
+    }
+    
+    private String extractFileName(Part part){
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        for(String s : items){
+            if(s.trim().startsWith("filename")){
+                return s.substring(s.indexOf("=") + 2, s.length() - 1);
+            }
+        }
+        return "";
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

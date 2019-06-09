@@ -40,9 +40,12 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     , @NamedQuery(name = "Customer.findBySurnames", query = "SELECT c FROM Customer c WHERE c.surnames = :surnames")
     , @NamedQuery(name = "Customer.findByEmail", query = "SELECT c FROM Customer c WHERE c.email = :email")
     , @NamedQuery(name = "Customer.findByPassword", query = "SELECT c FROM Customer c WHERE c.password = :password")
+    , @NamedQuery(name = "Customer.findByDni", query = "SELECT c FROM Customer c WHERE c.dni = :dni")
     , @NamedQuery(name = "Customer.findByPhone", query = "SELECT c FROM Customer c WHERE c.phone = :phone")
     , @NamedQuery(name = "Customer.findByCountry", query = "SELECT c FROM Customer c WHERE c.country = :country")
-    , @NamedQuery(name = "Customer.findByBirthDate", query = "SELECT c FROM Customer c WHERE c.birthDate = :birthDate")})
+    , @NamedQuery(name = "Customer.findByBirthDate", query = "SELECT c FROM Customer c WHERE c.birthDate = :birthDate")
+    , @NamedQuery(name = "Customer.findByImageName", query = "SELECT c FROM Customer c WHERE c.imageName = :imageName")
+    , @NamedQuery(name = "Customer.findByImagePath", query = "SELECT c FROM Customer c WHERE c.imagePath = :imagePath")})
 public class Customer implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -69,9 +72,14 @@ public class Customer implements Serializable {
     private String email;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 30)
+    @Size(min = 1, max = 150)
     @Column(name = "password")
     private String password;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 30)
+    @Column(name = "dni")
+    private String dni;
     @Column(name = "phone")
     private Integer phone;
     @Basic(optional = false)
@@ -84,6 +92,12 @@ public class Customer implements Serializable {
     @Column(name = "birthDate")
     @Temporal(TemporalType.DATE)
     private Date birthDate;
+    @Size(max = 255)
+    @Column(name = "imageName")
+    private String imageName;
+    @Size(max = 255)
+    @Column(name = "imagePath")
+    private String imagePath;
     @OneToMany(mappedBy = "idUser")
     private Collection<Reservation> reservationCollection;
 
@@ -93,14 +107,14 @@ public class Customer implements Serializable {
     public Customer(Integer idCustomer) {
         this.idCustomer = idCustomer;
     }
-  
 
-    public Customer(Integer idCustomer, String name, String surnames, String email, String password, String country, Date birthDate) {
+    public Customer(Integer idCustomer, String name, String surnames, String email, String password, String dni, String country, Date birthDate) {
         this.idCustomer = idCustomer;
         this.name = name;
         this.surnames = surnames;
         this.email = email;
         this.password = password;
+        this.dni = dni;
         this.country = country;
         this.birthDate = birthDate;
     }
@@ -145,6 +159,14 @@ public class Customer implements Serializable {
         this.password = password;
     }
 
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
     public Integer getPhone() {
         return phone;
     }
@@ -167,6 +189,22 @@ public class Customer implements Serializable {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     @XmlTransient

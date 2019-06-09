@@ -20,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -34,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Reservation.findByIdReservation", query = "SELECT r FROM Reservation r WHERE r.idReservation = :idReservation")
     , @NamedQuery(name = "Reservation.findByReservationDate", query = "SELECT r FROM Reservation r WHERE r.reservationDate = :reservationDate")
     , @NamedQuery(name = "Reservation.findByCollectionDate", query = "SELECT r FROM Reservation r WHERE r.collectionDate = :collectionDate")
-    , @NamedQuery(name = "Reservation.findByReturnDate", query = "SELECT r FROM Reservation r WHERE r.returnDate = :returnDate")})
+    , @NamedQuery(name = "Reservation.findByReturnDate", query = "SELECT r FROM Reservation r WHERE r.returnDate = :returnDate")
+    , @NamedQuery(name = "Reservation.findByFinalPrice", query = "SELECT r FROM Reservation r WHERE r.finalPrice = :finalPrice")})
 public class Reservation implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,6 +54,10 @@ public class Reservation implements Serializable {
     @Column(name = "returnDate")
     @Temporal(TemporalType.DATE)
     private Date returnDate;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "finalPrice")
+    private double finalPrice;
     @JoinColumn(name = "idCar", referencedColumnName = "idCar")
     @ManyToOne
     private Car idCar;
@@ -64,6 +70,11 @@ public class Reservation implements Serializable {
 
     public Reservation(Integer idReservation) {
         this.idReservation = idReservation;
+    }
+
+    public Reservation(Integer idReservation, double finalPrice) {
+        this.idReservation = idReservation;
+        this.finalPrice = finalPrice;
     }
 
     public Integer getIdReservation() {
@@ -96,6 +107,14 @@ public class Reservation implements Serializable {
 
     public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public double getFinalPrice() {
+        return finalPrice;
+    }
+
+    public void setFinalPrice(double finalPrice) {
+        this.finalPrice = finalPrice;
     }
 
     public Car getIdCar() {

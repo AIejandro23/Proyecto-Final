@@ -6,21 +6,26 @@
 package com.mycompany.rentacar.controladores;
 
 import com.mycompany.rentacar.crud.Crud;
+import com.mycompany.rentacar.entities.Customer;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Alejandro
  */
-public class InsertUser extends HttpServlet {
+@WebServlet(name = "ReservaCliente", urlPatterns = {"/ReservaCliente"})
+public class ReservaCliente extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,37 +37,8 @@ public class InsertUser extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+            throws ServletException, IOException, ParseException {
        
-        try{
-        String nombre = request.getParameter("nombre");
-        String apellidos = request.getParameter("apellidos");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String pais = request.getParameter("pais");
-        String telefono = request.getParameter("phone");
-        String aniversario = request.getParameter("birthday");
-        String dni = request.getParameter("dni");
-        
-        
-        SimpleDateFormat formatter1=new SimpleDateFormat("MMM dd, yyyy");  
-        Date dateAniversario = formatter1.parse(aniversario);  
-        
-        int phone = Integer.parseInt(telefono);
-        
-        Crud crud = new Crud();
-        
-        crud.insertUser(nombre, apellidos, password, email, pais, phone, dateAniversario,dni);
-        
-        RequestDispatcher rs = request.getRequestDispatcher("/WEB-INF/Layout.jsp");
-        request.setAttribute("pagina", "login");
-                
-        rs.forward(request, response);
-        
-        }catch(Exception e){
-            System.out.println("Error: "+  e.getMessage());
-        }
        
         
     }
@@ -79,7 +55,11 @@ public class InsertUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ParseException ex) {
+            Logger.getLogger(ReservaCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -93,7 +73,33 @@ public class InsertUser extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try{
+        HttpSession httpsession = request.getSession();
+        
+        String fechaRecogida = (String) httpsession.getAttribute("fechaRecogida");
+        String fechaDevolucion = (String) httpsession.getAttribute("fechaVuelta");
+        
+        String posicionCar = request.getParameter("posicion");
+        int posicion = Integer.parseInt(posicionCar);        
+        
+        String idCar = request.getParameter("idCar");
+        int intIdCar = Integer.parseInt(idCar);
+        
+        String precio = request.getParameter("precio");
+        Double precioFinal = Double.parseDouble(precio);
+                
+        Customer customer = (Customer) httpsession.getAttribute("usuario"); 
+
+        Crud crud = new Crud();
+        crud.bookCarCustomer(intIdCar,posicion, customer.getIdCustomer() , fechaRecogida , fechaDevolucion, precioFinal);
+        
+        RequestDispatcher rs = request.getRequestDispatcher("/WEB-INF/Layout.jsp");
+          request.setAttribute("pagina", "mainpage");
+
+          rs.forward(request, response);
+        }catch(Exception e){
+            System.err.println("Error en la reserva: " + e.getLocalizedMessage());
+        }
     }
 
     /**

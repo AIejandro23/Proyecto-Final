@@ -19,12 +19,20 @@ import javax.servlet.http.HttpSession;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import com.mycompany.rentacar.crud.Crud;
+import java.io.File;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author Alejandro
  */
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2,
+        maxFileSize = 1024 * 1024 * 10,
+        maxRequestSize = 1024 * 1024 * 50,
+        location="C:\\Users\\Alejandro\\Documents\\NetBeansProjects\\RentACar\\src\\main\\webapp\\imagenes")
 public class InsertCar extends HttpServlet {
 
     /**
@@ -38,22 +46,7 @@ public class InsertCar extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-
         
-        String matricula = request.getParameter("matricula");
-        String marca = request.getParameter("marca");
-        String localizacion = request.getParameter("localizacion");
-        String modelo = request.getParameter("modelo");
-      
-        Crud crud = new Crud();
-        
-        crud.insertCar(matricula,marca,localizacion,modelo);
-        
-        RequestDispatcher rs = request.getRequestDispatcher("/WEB-INF/Layout.jsp");
-        request.setAttribute("pagina", "admin");
-                
-        rs.forward(request, response);
         
     }
 
@@ -83,7 +76,34 @@ public class InsertCar extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        HttpSession httpsession = request.getSession();
+        
+        String matricula = request.getParameter("matricula");
+        String marca = request.getParameter("marca");
+        String localizacion = request.getParameter("localizacion");
+        String modelo = request.getParameter("modelo");
+        String descripcion = request.getParameter("descripcion");
+        String precioDia = request.getParameter("precioDia");
+        
+        Part imagen = request.getPart("imagen");
+        String nombreImagen = extractFileName(imagen);
+
+        String savePath = "C:\\Users\\Alejandro\\Documents\\NetBeansProjects\\RentACar\\src\\main\\webapp\\imagenes" + File.separator + nombreImagen;
+        File fileSave = new File(savePath);
+        
+        imagen.write(File.separator + nombreImagen);
+        
+        Crud crud = new Crud();
+        
+        crud.insertCar(nombreImagen,savePath,matricula,marca,localizacion,modelo,descripcion,precioDia);
+        
+        List<Car> listaCoches = crud.getAllVehiculos();
+        httpsession.setAttribute("listaVehiculos",listaCoches);
+
+        RequestDispatcher rs = request.getRequestDispatcher("/Admin");
+                
+        rs.forward(request, response);
     }
 
     /**
@@ -96,4 +116,14 @@ public class InsertCar extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private String extractFileName(Part part){
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        for(String s : items){
+            if(s.trim().startsWith("filename")){
+                return s.substring(s.indexOf("=") + 2, s.length() - 1);
+            }
+        }
+        return "";
+    }
 }

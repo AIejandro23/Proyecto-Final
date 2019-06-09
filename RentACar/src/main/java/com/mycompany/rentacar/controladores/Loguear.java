@@ -41,6 +41,19 @@ public class Loguear extends HttpServlet {
         
         Customer usuario = crud.login(email, password);
         
+
+        if(email.equals("admin") && password.equals("admin")){
+          RequestDispatcher rs = request.getRequestDispatcher("admin.jsp");
+       
+          
+          HttpSession httpsession = request.getSession();
+               
+               httpsession.setAttribute("usuario", usuario);
+               httpsession.setAttribute("nombre", usuario.getName());
+
+          rs.forward(request, response);
+        }
+        
         if(usuario != null){
            RequestDispatcher rs = request.getRequestDispatcher("/WEB-INF/Layout.jsp");
                request.setAttribute("pagina", "mainpage");             
@@ -53,8 +66,11 @@ public class Loguear extends HttpServlet {
                rs.forward(request, response);
         }else{
           RequestDispatcher rs = request.getRequestDispatcher("/WEB-INF/Layout.jsp");
-          request.setAttribute("pagina", "signup");
-
+          request.setAttribute("pagina", "login");
+          
+           HttpSession httpsession = request.getSession();
+               
+           httpsession.setAttribute("error", true);
           rs.forward(request, response);
         }
     }

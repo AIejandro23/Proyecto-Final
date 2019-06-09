@@ -19,6 +19,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -34,7 +35,11 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @NamedQueries({
     @NamedQuery(name = "Car.findAll", query = "SELECT c FROM Car c")
     , @NamedQuery(name = "Car.findByIdCar", query = "SELECT c FROM Car c WHERE c.idCar = :idCar")
-    , @NamedQuery(name = "Car.findByEnrollment", query = "SELECT c FROM Car c WHERE c.enrollment = :enrollment")})
+    , @NamedQuery(name = "Car.findByImageName", query = "SELECT c FROM Car c WHERE c.imageName = :imageName")
+    , @NamedQuery(name = "Car.findByImagePath", query = "SELECT c FROM Car c WHERE c.imagePath = :imagePath")
+    , @NamedQuery(name = "Car.findByEnrollment", query = "SELECT c FROM Car c WHERE c.enrollment = :enrollment")
+    , @NamedQuery(name = "Car.findByReservado", query = "SELECT c FROM Car c WHERE c.reservado = :reservado")
+    , @NamedQuery(name = "Car.findByPricePerDay", query = "SELECT c FROM Car c WHERE c.pricePerDay = :pricePerDay")})
 public class Car implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,9 +48,26 @@ public class Car implements Serializable {
     @Basic(optional = false)
     @Column(name = "idCar")
     private Integer idCar;
+    @Size(max = 255)
+    @Column(name = "imageName")
+    private String imageName;
+    @Size(max = 255)
+    @Column(name = "imagePath")
+    private String imagePath;
     @Size(max = 20)
     @Column(name = "enrollment")
     private String enrollment;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "reservado")
+    private int reservado;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "pricePerDay")
+    private double pricePerDay;
+    @JoinColumn(name = "idModel", referencedColumnName = "idModelo")
+    @ManyToOne
+    private Model idModel;
     @JoinColumn(name = "idBrand", referencedColumnName = "idBrand")
     @ManyToOne
     private Brand idBrand;
@@ -62,6 +84,12 @@ public class Car implements Serializable {
         this.idCar = idCar;
     }
 
+    public Car(Integer idCar, int reservado, double pricePerDay) {
+        this.idCar = idCar;
+        this.reservado = reservado;
+        this.pricePerDay = pricePerDay;
+    }
+
     public Integer getIdCar() {
         return idCar;
     }
@@ -70,12 +98,52 @@ public class Car implements Serializable {
         this.idCar = idCar;
     }
 
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     public String getEnrollment() {
         return enrollment;
     }
 
     public void setEnrollment(String enrollment) {
         this.enrollment = enrollment;
+    }
+
+    public int getReservado() {
+        return reservado;
+    }
+
+    public void setReservado(int reservado) {
+        this.reservado = reservado;
+    }
+
+    public double getPricePerDay() {
+        return pricePerDay;
+    }
+
+    public void setPricePerDay(double pricePerDay) {
+        this.pricePerDay = pricePerDay;
+    }
+
+    public Model getIdModel() {
+        return idModel;
+    }
+
+    public void setIdModel(Model idModel) {
+        this.idModel = idModel;
     }
 
     public Brand getIdBrand() {

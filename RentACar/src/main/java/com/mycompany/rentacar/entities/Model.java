@@ -6,6 +6,7 @@
 package com.mycompany.rentacar.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,9 +17,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -30,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Model.findAll", query = "SELECT m FROM Model m")
     , @NamedQuery(name = "Model.findByIdModelo", query = "SELECT m FROM Model m WHERE m.idModelo = :idModelo")
-    , @NamedQuery(name = "Model.findByName", query = "SELECT m FROM Model m WHERE m.name = :name")})
+    , @NamedQuery(name = "Model.findByName", query = "SELECT m FROM Model m WHERE m.name = :name")
+    , @NamedQuery(name = "Model.findByDescripcion", query = "SELECT m FROM Model m WHERE m.descripcion = :descripcion")})
 public class Model implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,6 +47,11 @@ public class Model implements Serializable {
     @Size(max = 200)
     @Column(name = "name")
     private String name;
+    @Size(max = 600)
+    @Column(name = "descripcion")
+    private String descripcion;
+    @OneToMany(mappedBy = "idModel")
+    private Collection<Car> carCollection;
     @JoinColumn(name = "idBrand", referencedColumnName = "idBrand")
     @ManyToOne
     private Brand idBrand;
@@ -67,6 +77,24 @@ public class Model implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<Car> getCarCollection() {
+        return carCollection;
+    }
+
+    public void setCarCollection(Collection<Car> carCollection) {
+        this.carCollection = carCollection;
     }
 
     public Brand getIdBrand() {

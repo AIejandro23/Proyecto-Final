@@ -4,6 +4,14 @@
         <welcome-file>Inicio</welcome-file>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+    <filter>
+        <filter-name>NewFilter</filter-name>
+        <filter-class>com.mycompany.rentacar.filtros.NewFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>NewFilter</filter-name>
+        <url-pattern>/Admin</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>InsertCar</servlet-name>
         <servlet-class>com.mycompany.rentacar.controladores.InsertCar</servlet-class>
@@ -24,6 +32,70 @@
         <servlet-name>Admin</servlet-name>
         <servlet-class>com.mycompany.rentacar.forwards.Admin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Consultar</servlet-name>
+        <servlet-class>com.mycompany.rentacar.controladores.Consultar</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Vehiculos</servlet-name>
+        <servlet-class>com.mycompany.rentacar.forwards.Vehiculos</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteCar</servlet-name>
+        <servlet-class>com.mycompany.rentacar.controladores.DeleteCar</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditCar</servlet-name>
+        <servlet-class>com.mycompany.rentacar.controladores.EditCar</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Edit</servlet-name>
+        <servlet-class>com.mycompany.rentacar.forwards.Edit</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Reservado</servlet-name>
+        <servlet-class>com.mycompany.rentacar.controladores.Reservado</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Reservar</servlet-name>
+        <servlet-class>com.mycompany.rentacar.forwards.Reservar</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReservaCliente</servlet-name>
+        <servlet-class>com.mycompany.rentacar.controladores.ReservaCliente</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Buscar</servlet-name>
+        <servlet-class>com.mycompany.rentacar.controladores.Buscar</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Historial</servlet-name>
+        <servlet-class>com.mycompany.rentacar.controladores.Historial</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Perfil</servlet-name>
+        <servlet-class>com.mycompany.rentacar.forwards.Perfil</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Rutas</servlet-name>
+        <servlet-class>com.mycompany.rentacar.forwards.Rutas</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Menorca</servlet-name>
+        <servlet-class>com.mycompany.rentacar.forwards.Menorca</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Menorca2</servlet-name>
+        <servlet-class>com.mycompany.rentacar.forwards.Menorca</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditarPerfil</servlet-name>
+        <servlet-class>com.mycompany.rentacar.forwards.EditarPerfil</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditProfile</servlet-name>
+        <servlet-class>com.mycompany.rentacar.controladores.EditProfile</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertCar</servlet-name>
         <url-pattern>/InsertCar</url-pattern>
@@ -43,6 +115,70 @@
     <servlet-mapping>
         <servlet-name>Admin</servlet-name>
         <url-pattern>/Admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Consultar</servlet-name>
+        <url-pattern>/Consultar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Vehiculos</servlet-name>
+        <url-pattern>/Vehiculos</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteCar</servlet-name>
+        <url-pattern>/DeleteCar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditCar</servlet-name>
+        <url-pattern>/EditCar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Edit</servlet-name>
+        <url-pattern>/Edit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Reservado</servlet-name>
+        <url-pattern>/Reservado</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Reservar</servlet-name>
+        <url-pattern>/Reservar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReservaCliente</servlet-name>
+        <url-pattern>/ReservaCliente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Buscar</servlet-name>
+        <url-pattern>/Buscar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Historial</servlet-name>
+        <url-pattern>/Historial</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Perfil</servlet-name>
+        <url-pattern>/Perfil</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Rutas</servlet-name>
+        <url-pattern>/Rutas</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Menorca</servlet-name>
+        <url-pattern>/Menorca</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Menorca2</servlet-name>
+        <url-pattern>/Menorca2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditarPerfil</servlet-name>
+        <url-pattern>/EditarPerfil</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditProfile</servlet-name>
+        <url-pattern>/EditProfile</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

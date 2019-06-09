@@ -6,21 +6,24 @@
 package com.mycompany.rentacar.controladores;
 
 import com.mycompany.rentacar.crud.Crud;
+import com.mycompany.rentacar.entities.Car;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Alejandro
  */
-public class InsertUser extends HttpServlet {
+
+public class Buscar extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,37 +36,8 @@ public class InsertUser extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
        
-        try{
-        String nombre = request.getParameter("nombre");
-        String apellidos = request.getParameter("apellidos");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String pais = request.getParameter("pais");
-        String telefono = request.getParameter("phone");
-        String aniversario = request.getParameter("birthday");
-        String dni = request.getParameter("dni");
-        
-        
-        SimpleDateFormat formatter1=new SimpleDateFormat("MMM dd, yyyy");  
-        Date dateAniversario = formatter1.parse(aniversario);  
-        
-        int phone = Integer.parseInt(telefono);
-        
-        Crud crud = new Crud();
-        
-        crud.insertUser(nombre, apellidos, password, email, pais, phone, dateAniversario,dni);
-        
-        RequestDispatcher rs = request.getRequestDispatcher("/WEB-INF/Layout.jsp");
-        request.setAttribute("pagina", "login");
-                
-        rs.forward(request, response);
-        
-        }catch(Exception e){
-            System.out.println("Error: "+  e.getMessage());
-        }
-       
+     
         
     }
 
@@ -93,8 +67,29 @@ public class InsertUser extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+        
+        String matricula = request.getParameter("matricula");
+        String marca = request.getParameter("marca");
+        String estadoReserva = request.getParameter("reservado");
+        String localizacion = request.getParameter("localizacion");
+        
+        HttpSession httpsession = request.getSession();
+        
+        Crud crud = new Crud();
+        List<Car> listaCoches = crud.searchCar(matricula,marca,localizacion,estadoReserva);
+        
+        if(listaCoches == null){
+            RequestDispatcher rs = request.getRequestDispatcher("/Admin");
+            httpsession.setAttribute("listaCoches",null);
+            rs.forward(request, response);
+
+            rs.forward(request, response);
+        }else{
+            httpsession.setAttribute("listaVehiculos",listaCoches);
+            RequestDispatcher rs = request.getRequestDispatcher("/Admin");
+            rs.forward(request, response);
+        }    }
+    
 
     /**
      * Returns a short description of the servlet.
